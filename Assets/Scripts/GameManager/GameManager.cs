@@ -29,7 +29,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // Construir todas las salas primero con el objeto activo
         foreach (var room in rooms)
         {
             room.gameObject.SetActive(true);
@@ -70,7 +69,6 @@ public class GameManager : MonoBehaviour
 
         int nextIndex = System.Array.IndexOf(rooms, nextRoom);
         ActivateRoom(nextIndex);
-
         roomsCleared++;
 
         yield return StartCoroutine(Fade(1f, 0f, 0.3f));
@@ -95,15 +93,29 @@ public class GameManager : MonoBehaviour
 
     IEnumerator GameOverCoroutine()
     {
-        yield return StartCoroutine(Fade(0f, 1f, 0.5f));
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // Guardar stats
+        PlayerPrefs.SetInt("RoomsCleared", roomsCleared);
+        PlayerPrefs.SetInt("TotalKills",   totalKills);
+        PlayerPrefs.Save();
+
+        // Fade lento a negro y esperar un momento para que se sienta dramático
+        yield return StartCoroutine(Fade(0f, 1f, 1.5f));
+        yield return new WaitForSeconds(0.5f);
+
+        SceneManager.LoadScene("GameOver");
     }
 
     IEnumerator VictoryCoroutine()
     {
-        yield return new WaitForSeconds(1f);
-        yield return StartCoroutine(Fade(0f, 1f, 0.5f));
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        PlayerPrefs.SetInt("RoomsCleared", roomsCleared);
+        PlayerPrefs.SetInt("TotalKills",   totalKills);
+        PlayerPrefs.Save();
+
+        yield return new WaitForSeconds(1.5f);
+        yield return StartCoroutine(Fade(0f, 1f, 1.5f));
+        yield return new WaitForSeconds(0.5f);
+
+        SceneManager.LoadScene("MainMenu");
     }
 
     IEnumerator Fade(float from, float to, float duration)
@@ -111,6 +123,9 @@ public class GameManager : MonoBehaviour
         if (fadePanel == null) yield break;
         CanvasGroup cg = fadePanel.GetComponent<CanvasGroup>();
         if (cg == null) yield break;
+
+        // Asegurarse de que el panel es visible durante el fade
+        fadePanel.SetActive(true);
 
         float elapsed = 0f;
         while (elapsed < duration)
