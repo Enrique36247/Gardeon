@@ -215,5 +215,6 @@ En conclusión, el proyecto ha resultado una experiencia completa de desarrollo 
 - Microsoft. (2024). *C# Documentation*. https://learn.microsoft.com/es-es/dotnet/csharp/
 - Nystrom, R. (2014). *Game Programming Patterns*. https://gameprogrammingpatterns.com
 ---
- 
-*Documento generado como parte del proyecto final del módulo correspondiente al Ciclo Formativo de Grado Superior en Desarrollo de Aplicaciones Multiplataforma — IES El Rincón — Curso 2º.*
+ ## 8. Github
+
+https://github.com/Enrique36247/Gardeon
